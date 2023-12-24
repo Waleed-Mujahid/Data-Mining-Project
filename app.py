@@ -7,6 +7,8 @@ heart_attack_model_weights = open('./model_checkpoints/heart_attack_rf.pkl', 'rb
 heart_attack_model = pickle.load(heart_attack_model_weights)
 heart_attack_scaler_file = open('./model_checkpoints/heart_attack_scaler.pkl', 'rb')
 heart_attack_scaler = pickle.load(heart_attack_scaler_file)
+heart_disease_file = open('./model_checkpoints/heart_disease_rf.pkl', 'rb')
+heart_disease_model = pickle.load(heart_disease_file)
 
 # Initialize_ the Flask application
 app = Flask(__name__)
@@ -33,8 +35,8 @@ def predict_heart_attack():
 def predict_heart_disease():
     # Handle POST request
     request_data = request.json
-    predictions = predict_heart_attack(request_data)
-    response_data = {"predictions": predictions}
+    predictions = heart_disease_model.predict(request_data["items"])
+    response_data = {"predictions": [int(x) for x in predictions]}
 
     return jsonify(response_data)
 
